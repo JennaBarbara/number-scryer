@@ -153,14 +153,13 @@ export default function App() {
       
       //set new selectable
       const newRoll = rollDie()
-     
-
+    
       setSelectable(newRoll, rowIndex, columnIndex, newSquareStatuses)
 
       //set new status
       setSquareStatuses(newSquareStatuses)
       //roll new die
-      setCurrentDie(newRoll )
+      setCurrentDie( newRoll )
 
     },
     [squareStatuses, setSquareStatuses, currentDie, setCurrentDie],
@@ -176,14 +175,16 @@ export default function App() {
   )
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-linear-to-t from-neutral-400 to-stone-400">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-t from-red-600 to-stone-400">
       <div className="flex flex-col min-h-screen w-full max-w-xl content-start py-10 px-10 bg-stone-50/50 gap-x-2 gap-y-4">
        <HowToDialog />
         <Title />
         <div className='flex flex-row p-x-5 justify-center gap-8'>
           <Score score={score} />
           <Roll currentDie={currentDie} />
-          <Bank bank={bank} onClick={() => useBank()} />
+          <Bank 
+            bank={bank} 
+            onClick={() => useBank()} />
         </div>
         {isGameOver && <div className='flex flex-row p-x-5 justify-center gap-2 text-center'>
           <p className='text-5xl'>GAME OVER</p>
@@ -203,7 +204,7 @@ export default function App() {
           <Button onClick={() => resetGame()}>Reset Game</Button>
          </div>
         <div className='bg-stone-50 p-5'>
-            <p>Credits: Number Pyre is an offshoot of Number Pyle, The rules and mechanics of which were invented by <a className="underline" href="https://lintilion.itch.io/">Lintilion</a></p>
+            <p>Credits: Number Pyre is an offshoot of <a className="underline" href="https://jennabarbara.github.io/number-pyle/">Number Pyle</a>, The rules and mechanics of which were invented by <a className="underline" href="https://lintilion.itch.io/">Lintilion</a></p>
             <p>This implementation is brought to you by <a className="underline" href="https://github.com/JennaBarbara/">JennaBarbara</a></p>
         </div>
       </div>
