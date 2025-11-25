@@ -6,6 +6,7 @@ import Button from './components/button.tsx';
 import Roll from './components/roll.tsx';
 import Bank from './components/bank.tsx';
 import HowToDialog from './components/how-to-dialog.tsx';
+import ShareButton from './components/share-button.tsx';
 import { useState, useCallback, useEffect } from 'react';
 import Score from './components/score.tsx';
 import { getStoredSquareStatus, setStoredSquareStatuses } from './utils/square-status-storage.tsx';
@@ -204,8 +205,9 @@ export default function App() {
             bank={bank} 
             onClick={() => bankRoll()} />
         </div>
-        {isGameOver && <div className='flex flex-row p-x-5 justify-center gap-2 text-center'>
+        {isGameOver && <div className='flex flex-col p-x-5 justify-center gap-2 text-center'>
           <p className='text-5xl'>GAME OVER</p>
+          <ShareButton score={score} squareStasuses={squareStatuses} />
         </div>}
         <Board isGameOver={isGameOver}>
             {squareStatuses.map((squareStatusRow, rowIndex) =>(
