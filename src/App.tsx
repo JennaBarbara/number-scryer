@@ -4,19 +4,18 @@ import Square from './components/square.tsx';
 import Board from './components/board.tsx';
 import Button from './components/button.tsx';
 import Roll from './components/roll.tsx';
-import Bank from './components/bank.tsx';
 import HowToDialog from './components/how-to-dialog.tsx';
 import ShareButton from './components/share-button.tsx';
 import GameModeSelect from './components/game-mode-select.tsx';
+import UpcomingDice from './components/upcoming-dice.tsx';
 import { useState, useCallback, useEffect } from 'react';
 import Score from './components/score.tsx';
 import { getStoredSquareStatus, setStoredSquareStatuses } from './utils/square-status-storage.tsx';
 import type { SquareStatus } from './utils/square-status.tsx';
-import { useCurrentDie } from './utils/use-current-die.tsx';
-import { rollDie } from './utils/rollDie.tsx';
+import {useDice} from './utils/use-dice.tsx';
 import { useHighScoreStorage } from './utils/use-high-score.tsx';
 import StatsDialog from './components/stats-dialog.tsx';
-import { useBankedDie } from './utils/use-banked-die.tsx';
+
 
 
 
@@ -27,10 +26,10 @@ export default function App() {
  const [highScore, setHighScore] = useHighScoreStorage()
  const [score, setScore] = useState<number>(0)
 
- const [currentDie, setCurrentDie] = useCurrentDie()
+ const [currentDie, upcomingDice, updateCurrentDie, resetDice] = useDice()
  const [isGameOver, setIsGameOver] = useState(false)
- const [bank, setBank] = useBankedDie()
- const [lastPlacedLocation, setLastPlacedLocation] =useState<undefined | Array<number>>(undefined)
+ //const [bank, setBank] = useBankedDie()
+ //const [lastPlacedLocation, setLastPlacedLocation] =useState<undefined | Array<number>>(undefined)
 
  //update status in local storage
   useEffect(() => {
@@ -62,30 +61,29 @@ export default function App() {
     setIsGameOver(gameOver)
   },[squareStatuses] )
 
-  const bankRoll = useCallback (() => {
+  // const bankRoll = useCallback (() => {
 
-     const newSquareStatuses= squareStatuses.map(function(row) {
-        return row.slice();
-     });
+  //    const newSquareStatuses= squareStatuses.map(function(row) {
+  //       return row.slice();
+  //    });
 
-     const newRoll = bank ?? rollDie()
+  //    const newRoll = bank ?? rollDie()
 
-    //clear selectable cells
-    if(lastPlacedLocation !== undefined){
-      for (let i = 0; i < 9; i++) {
-        for (let j=0; j<9; j++) {
-          newSquareStatuses[i][j].selectable=false
-        }
-      }
-      setSelectable(newRoll, lastPlacedLocation[0], lastPlacedLocation[1], newSquareStatuses)
-      setSquareStatuses(newSquareStatuses)
-    }
+  //   //clear selectable cells
+  //   if(lastPlacedLocation !== undefined){
+  //     for (let i = 0; i < 9; i++) {
+  //       for (let j=0; j<9; j++) {
+  //         newSquareStatuses[i][j].selectable=false
+  //       }
+  //     }
+  //     setSelectable(newRoll, lastPlacedLocation[0], lastPlacedLocation[1], newSquareStatuses)
+  //     setSquareStatuses(newSquareStatuses)
+  //   }
 
-    setBank(currentDie)
-    setCurrentDie(newRoll)
+  //   updateCurrentDie()
 
 
-  }, [lastPlacedLocation, squareStatuses, currentDie, setCurrentDie, bank, setBank])
+  // }, [lastPlacedLocation, squareStatuses, currentDie, updateCurrentDie])
 
   const selectSquare = useCallback(
     (rowIndex: number, columnIndex:number) => {
@@ -94,7 +92,7 @@ export default function App() {
          return row.slice();
       });
 
-      setLastPlacedLocation([rowIndex, columnIndex])
+     // setLastPlacedLocation([rowIndex, columnIndex])
 
       //clear selectable cells
       for (let i = 0; i < 9; i++) {
@@ -168,31 +166,27 @@ export default function App() {
           }
       
       //set new selectable
-      const newRoll = rollDie()
     
-      setSelectable(newRoll, rowIndex, columnIndex, newSquareStatuses)
+      setSelectable(upcomingDice[0], rowIndex, columnIndex, newSquareStatuses)
 
       //set new status
       setSquareStatuses(newSquareStatuses)
-      //roll new die
-      setCurrentDie( newRoll )
+      //updateDice
+       updateCurrentDie()
 
 
     },
-    [squareStatuses, setSquareStatuses, currentDie, setCurrentDie],
+    [squareStatuses, setSquareStatuses, currentDie, upcomingDice, updateCurrentDie],
   )
   const resetGame = useCallback(() => {
       setSquareStatuses(getDefaultStatus())
-      setCurrentDie(rollDie)
-      setBank(undefined)
-      setLastPlacedLocation(undefined)
-    
+      resetDice()
     },
-    [ setBank, setSquareStatuses, setCurrentDie],
+    [ setSquareStatuses, resetDice],
   )
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-linear-to-t from-red-600 to-stone-400">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-t from-blue-300 to-stone-400">
       <div className="flex flex-col min-h-screen w-full max-w-xl content-start py-10 px-10 bg-stone-50/50 gap-x-2 gap-y-4">
        <div className="flex flex-row justify-between pb-4 ">
         <StatsDialog highScore={highScore} />
@@ -203,9 +197,11 @@ export default function App() {
         <div className='flex flex-row p-x-5 justify-center gap-8'>
           <Score score={score} />
           <Roll currentDie={currentDie} />
-          <Bank 
+          <UpcomingDice upcomingDice={upcomingDice} />
+
+          {/* <Bank 
             bank={bank} 
-            onClick={() => bankRoll()} />
+            onClick={() => bankRoll()} /> */}
         </div>
         {isGameOver && <div className='flex flex-col p-x-5 justify-center gap-2 text-center'>
           <p className='text-5xl'>GAME OVER</p>
@@ -227,7 +223,7 @@ export default function App() {
          </div>
         <div className='flex flex-col bg-stone-50 p-5 gap-2'>
             <p>Credits:</p>
-            <p> Number Pyre is a variant game mode of <a className="underline" href="https://jennabarbara.github.io/number-pyle/">Number Pyle</a>, with a mechanic to bank a roll.</p>
+            <p> Number Scryer is a variant game mode of <a className="underline" href="https://jennabarbara.github.io/number-pyle/">Number Pyle</a>, with a mechanic to view upcoming rolls.</p>
             <p>The rules and mechanics of <a className="underline" href="https://jennabarbara.github.io/number-pyle/">Number Pyle</a> were invented by <a className="underline" href="https://lintilion.itch.io/">Lintilion</a></p>
             <p>This implementation is brought to you by <a className="underline" href="https://github.com/JennaBarbara/">JennaBarbara</a></p>
         </div>

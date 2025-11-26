@@ -1,7 +1,7 @@
-import { rollDie } from "./rollDie"
+import { rollDie } from "./roll-die"
 
 
-const STORED_CURRENT_DIE = "numberPyre.currentDie"
+const STORED_CURRENT_DIE = "numberScryer.currentDie"
 
 export function getStoredCurrentDie(): number {
   const rawDie = localStorage.getItem(STORED_CURRENT_DIE)

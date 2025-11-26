@@ -1,7 +1,7 @@
 
 import type { SquareStatus } from "./square-status"
 
-const STORED_SQUARE_STATUSES = "numberPyre.squareStasuses"
+const STORED_SQUARE_STATUSES = "numberScryer.squareStasuses"
 
 
 export function getStoredSquareStatus(): Array<Array<SquareStatus>> | undefined {

@@ -35,7 +35,7 @@ export default function ShareButton({score, squareStasuses}:ShareButtonProps) {
 }
 
 function generateBoardStateText(   score: number, squareStasuses: Array<Array<SquareStatus>> ):string{
-    return `You scored a ${score} in Number Pyre \n \n${generateEmojiBoard(squareStasuses)}`
+    return `You scored a ${score} in Number Scryer \n \n${generateEmojiBoard(squareStasuses)}`
 }
 
 function generateEmojiBoard( squareStasuses: Array<Array<SquareStatus>> ) : string {

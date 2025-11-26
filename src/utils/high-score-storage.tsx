@@ -1,6 +1,6 @@
 
 
-const STORED_HIGH_SCORE = "numberPyre.highScore"
+const STORED_HIGH_SCORE = "numberScryer.highScore"
 
 export function getStoredHighScore(): number {
   const rawHighScore = localStorage.getItem(STORED_HIGH_SCORE)
