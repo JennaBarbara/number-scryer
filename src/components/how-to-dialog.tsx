@@ -20,7 +20,7 @@ export default function HowToDialog() {
                     Look at your current roll, it will be a random number between 1 and 6
                 </li>
                 <li>
-                    You may choose to store your current roll in the bank by picking the bank cell. If you do, your current roll with be replaced by the current contents of the bank, or a new roll if the bank is empty
+                    Your next roll will be the number on the left under "Next Rolls", the number on the right will follow 
                 </li>
                 <li>
                     Pick a central cell on either side as your starting cell, your current roll will be placed there
