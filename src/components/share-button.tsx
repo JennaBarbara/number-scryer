@@ -26,7 +26,9 @@ export default function ShareButton({score, squareStasuses}:ShareButtonProps) {
     return ( 
         <div>
             <Button size="sm" onClick={() => copyBoardState()}>Share Score</Button>
-            {copyStatus && <p>{copyStatus}</p>}
+             {copyStatus && <div className="fixed z-50 top-20 rounded-md right-1/2 translate-x-1/2 bg-blue-200 p-2">
+                    <p>{copyStatus}</p>
+                </div>}
         </div>
     )
 
