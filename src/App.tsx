@@ -28,8 +28,6 @@ export default function App() {
 
  const [currentDie, upcomingDice, updateCurrentDie, resetDice] = useDice()
  const [isGameOver, setIsGameOver] = useState(false)
- //const [bank, setBank] = useBankedDie()
- //const [lastPlacedLocation, setLastPlacedLocation] =useState<undefined | Array<number>>(undefined)
 
  //update status in local storage
   useEffect(() => {
@@ -61,38 +59,12 @@ export default function App() {
     setIsGameOver(gameOver)
   },[squareStatuses] )
 
-  // const bankRoll = useCallback (() => {
-
-  //    const newSquareStatuses= squareStatuses.map(function(row) {
-  //       return row.slice();
-  //    });
-
-  //    const newRoll = bank ?? rollDie()
-
-  //   //clear selectable cells
-  //   if(lastPlacedLocation !== undefined){
-  //     for (let i = 0; i < 9; i++) {
-  //       for (let j=0; j<9; j++) {
-  //         newSquareStatuses[i][j].selectable=false
-  //       }
-  //     }
-  //     setSelectable(newRoll, lastPlacedLocation[0], lastPlacedLocation[1], newSquareStatuses)
-  //     setSquareStatuses(newSquareStatuses)
-  //   }
-
-  //   updateCurrentDie()
-
-
-  // }, [lastPlacedLocation, squareStatuses, currentDie, updateCurrentDie])
-
   const selectSquare = useCallback(
     (rowIndex: number, columnIndex:number) => {
 
       const newSquareStatuses= squareStatuses.map(function(row) {
          return row.slice();
-      });
-
-     // setLastPlacedLocation([rowIndex, columnIndex])
+      })
 
       //clear selectable cells
       for (let i = 0; i < 9; i++) {
@@ -166,11 +138,11 @@ export default function App() {
           }
       
       //set new selectable
-    
       setSelectable(upcomingDice[0], rowIndex, columnIndex, newSquareStatuses)
 
       //set new status
       setSquareStatuses(newSquareStatuses)
+
       //updateDice
        updateCurrentDie()
 
@@ -198,10 +170,6 @@ export default function App() {
           <Score score={score} />
           <Roll currentDie={currentDie} />
           <UpcomingDice upcomingDice={upcomingDice} />
-
-          {/* <Bank 
-            bank={bank} 
-            onClick={() => bankRoll()} /> */}
         </div>
         {isGameOver && <div className='flex flex-col p-x-5 justify-center gap-2 text-center'>
           <p className='text-5xl'>GAME OVER</p>
